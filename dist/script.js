@@ -2886,6 +2886,23 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
+
+  var designModal = new _modules_modal_component__WEBPACK_IMPORTED_MODULE_0__["default"]('.popup-design', '.button-design');
+  designModal.modalDelegation({
+    useButtonsClass: true
+  });
+  var consultationModal = new _modules_modal_component__WEBPACK_IMPORTED_MODULE_0__["default"]('.popup-consultation', '.button-consultation');
+  consultationModal.modalDelegation({
+    useButtonsClass: true
+  }); //consultationModal.showWithDelay(60000)
+
+  var giftModal = new _modules_modal_component__WEBPACK_IMPORTED_MODULE_0__["default"]('.popup-gift', '.fixed-gift');
+  giftModal.init();
+
+  giftModal.onShow = function () {
+    this.buttonOpen.style.display = 'none';
+    giftModal.destroy();
+  };
 });
 
 /***/ }),
@@ -2941,7 +2958,6 @@ var Modal =
 function () {
   function Modal(modalSel, buttonOpenSel) {
     var classShow = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'show';
-    var formClass = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'form';
 
     _classCallCheck(this, Modal);
 
@@ -2952,7 +2968,6 @@ function () {
       this.buttonOpen = document.querySelector(buttonOpenSel);
       this.modalClose = this.modal.querySelector('[data-close]');
       this.classShow = classShow;
-      this.formElm = this.modal.querySelector('.' + formClass);
     } catch (e) {
       throw new Error("variables doesn't found");
     }
@@ -3000,6 +3015,14 @@ function () {
   }, {
     key: "destroy",
     value: function destroy() {
+      if (_checkNodeList.call(this, this.buttonOpen)) {
+        this.buttonOpen.forEach(function (button) {
+          button.onclick = null;
+        });
+      } else {
+        this.buttonOpen.onclick = null;
+      }
+
       this.onDestroy();
     }
   }, {

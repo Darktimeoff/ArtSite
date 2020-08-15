@@ -1,14 +1,13 @@
 
 export default class Modal {
-    constructor(modalSel, buttonOpenSel, classShow='show', formClass='form') {
+    constructor(modalSel, buttonOpenSel, classShow='show') {
        try{
 			this.modal = document.querySelector(modalSel);
 			this.buttonOpenSel = buttonOpenSel;
 			this.modalSel = modalSel;
-			this.buttonOpen = document.querySelector(buttonOpenSel)
+			this.buttonOpen = document.querySelector(buttonOpenSel);
 			this.modalClose = this.modal.querySelector('[data-close]');
 			this.classShow = classShow;
-			this.formElm = this.modal.querySelector('.' + formClass);
  	   } catch(e) {
 			throw new Error("variables doesn't found");
 	   }
@@ -48,6 +47,13 @@ export default class Modal {
 	}
 	
 	destroy() {
+		if(_checkNodeList.call(this, this.buttonOpen)) {
+			this.buttonOpen.forEach(button => {
+				button.onclick =  null;
+			});
+		} else {
+			this.buttonOpen.onclick =  null;
+		}
 		this.onDestroy();
 	}
 
