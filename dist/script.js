@@ -1670,6 +1670,8 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modal_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modal.component */ "./src/js/modules/modal.component.js");
+/* harmony import */ var _modules_slider_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider.component */ "./src/js/modules/slider.component.js");
+
 
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
@@ -1691,6 +1693,9 @@ window.addEventListener('DOMContentLoaded', function () {
     giftModal.destroy();
     this.buttonOpen.remove();
   };
+
+  Object(_modules_slider_component__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider', '.feedback-slider-item', 'horizontal', 'show', '.main-prev-btn', '.main-next-btn', true, 3000, true);
+  Object(_modules_slider_component__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider', '.main-slider-item', 'vertical', 'show');
 });
 
 /***/ }),
@@ -1873,6 +1878,122 @@ function _calcScrollEnd(scrollHeight) {
     window.onscroll = null;
   }
 }
+
+/***/ }),
+
+/***/ "./src/js/modules/slider.component.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/slider.component.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var sliders = function sliders(parent, slides, direction, showClass, prev, next) {
+  var autoPlay = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : true;
+  var delay = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 3000;
+  var arrowUse = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : false;
+  var slideIndex = 1;
+  var paused = false;
+  var parentSec = document.querySelector(parent);
+  var items = parentSec.querySelectorAll(slides);
+
+  function showSlides(n) {
+    if (n > items.length) {
+      slideIndex = 1;
+    }
+
+    if (n < 1) {
+      slideIndex = items.length;
+    }
+
+    hideSlides();
+    currentSlideShow(showClass);
+  }
+
+  function hideSlides() {
+    items.forEach(function (item) {
+      item.classList.add('animated');
+      item.style.display = 'none';
+      item.classList.remove(showClass);
+    });
+  }
+
+  function currentSlideShow(classAdd) {
+    items[slideIndex - 1].classList.add(classAdd);
+  }
+
+  function currentSlideHide(classHide) {
+    items[slideIndex - 1].classList.remove(classHide);
+  }
+
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  showSlides(slideIndex);
+
+  function initAutoShow() {
+    if (direction === 'vertical') {
+      paused = autoShow(initVerSlide, delay);
+    } else {
+      paused = autoShow(initHorSlide, delay);
+    }
+  }
+
+  function initVerSlide() {
+    plusSlides(1);
+    currentSlideShow('slideInDown');
+  }
+
+  function initHorSlide() {
+    plusSlides(1);
+    currentSlideShow('slideInLeft');
+    currentSlideHide('slideInRight');
+  }
+
+  function autoShow(func, delay) {
+    return setInterval(func, delay);
+  }
+
+  function useArrow() {
+    try {
+      var prevBtn = parentSec.querySelector(prev);
+      var nextBtn = parentSec.querySelector(next);
+
+      prevBtn.onclick = function () {
+        plusSlides(-1);
+        currentSlideHide('slideInLeft');
+        currentSlideShow('slideInRight');
+      };
+
+      nextBtn.onclick = function () {
+        plusSlides(1);
+        currentSlideShow('slideInLeft');
+        currentSlideHide('slideInRight');
+      };
+    } catch (e) {}
+  }
+
+  if (autoPlay) {
+    initAutoShow();
+    parentSec.addEventListener('mouseenter', function () {
+      clearInterval(paused);
+    });
+    parentSec.addEventListener('mouseleave', function () {
+      initAutoShow();
+    });
+  }
+
+  if (arrowUse) useArrow();
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (sliders);
 
 /***/ })
 

@@ -1,4 +1,5 @@
 import Modal from './modules/modal.component';
+import sliders from './modules/slider.component'
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
     const designModal = new Modal('.popup-design', '.button-design');
@@ -15,4 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
         giftModal.destroy();
         this.buttonOpen.remove();
     }
+
+    sliders('.feedback-slider', '.feedback-slider-item', 'horizontal', 'show', '.main-prev-btn', '.main-next-btn', true, 3000, true);
+    sliders('.main-slider', '.main-slider-item', 'vertical', 'show')
 });
