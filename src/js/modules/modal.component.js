@@ -1,6 +1,6 @@
 
 export default class Modal {
-    constructor(modalSel, buttonOpenSel, classShow='show') {
+    constructor(modalSel, buttonOpenSel, classShow='show', animationClass='fadeIn') {
        try{
 			this.modal = document.querySelector(modalSel);
 			this.buttonOpenSel = buttonOpenSel;
@@ -8,6 +8,7 @@ export default class Modal {
 			this.buttonOpen = document.querySelector(buttonOpenSel);
 			this.modalClose = this.modal.querySelector('[data-close]');
 			this.classShow = classShow;
+			this.animationClass = animationClass;
  	   } catch(e) {
 			throw new Error("variables doesn't found");
 	   }
@@ -35,13 +36,13 @@ export default class Modal {
     }
 
     show() {
-		this.modal.classList.add(this.classShow);
+		this.modal.classList.add(this.classShow, 'animated',this.animationClass);
 		document.body.style.overflow = 'hidden';
 		this.onShow();
     }
 
     hide() {
-		this.modal.classList.remove(this.classShow);
+		this.modal.classList.remove(this.classShow, 'animated', this.animationClass);
 		document.body.style.overflow = '';
 		this.onHide();
 	}
@@ -59,14 +60,30 @@ export default class Modal {
 
 
 	showWithDelay(delay) {
-		setTimeout(() => {this.emulatedClick()}, delay);
+		setTimeout(() => {
+			let display = false;
+
+			document.querySelectorAll('[data-modal]').forEach(modal => {
+				if(modal.classList.contains(this.classShow)) display = true;
+			});
+
+			if(!display) this.emulatedClick();
+		}, delay);
+	}
+
+	openByScroll() {
+		const scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+		window.onscroll = _calcScrollEnd.bind(this, scrollHeight);
 	}
 
 	emulatedClick() {
-		typeof this.buttonOpen === 'object' ? this.buttonOpen[0].click() : this.buttonOpen.click();
+		_checkNodeList(this.buttonOpen) ? this.buttonOpen[0].click() : this.buttonOpen.click();
 	}
 
-	onShow() {}
+	onShow() {
+		return true
+	}
 
 	onHide() {}
 
@@ -78,6 +95,7 @@ function _buttonHandler(event) {
 	event.preventDefault();
 	this.show();
 	this.modal.onclick = _modalHandler.bind(this);
+	this.buttonPressed = true;
 }
 function _checkNodeList(array) {
 	return Boolean(array instanceof NodeList);
@@ -100,5 +118,12 @@ function _modalClose(event) {
 function _wrapperDelHandler(e) {
 	if(e.target && e.target.classList.contains(this.buttonOpenSel.slice(1))) {
 		_buttonHandler.call(this, e);
+	}
+}
+
+function _calcScrollEnd(scrollHeight) {
+	if(window.pageYOffset + document.documentElement.clientHeight >= scrollHeight) {
+		this.emulatedClick();
+		window.onscroll = null;
 	}
 }
