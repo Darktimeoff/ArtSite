@@ -1,5 +1,7 @@
 import Modal from './modules/modal.component';
-import sliders from './modules/slider.component'
+import sliders from './modules/slider.component';
+import { forms } from './modules/form.component';
+
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
     const designModal = new Modal('.popup-design', '.button-design');
@@ -18,5 +20,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     sliders('.feedback-slider', '.feedback-slider-item', 'horizontal', 'show', '.main-prev-btn', '.main-next-btn', true, 3000, true);
-    sliders('.main-slider', '.main-slider-item', 'vertical', 'show')
+    sliders('.main-slider', '.main-slider-item', 'vertical', 'show');
+    forms('form')
 });

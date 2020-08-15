@@ -49,44 +49,96 @@ export default class Form {
     }
 }
 
-export function forms(selectorForms, urlSend) {
+export function forms(selectorForms) {
     const forms = document.querySelectorAll(selectorForms);
     const message = {
         success: "данные успешно отправились",
         failure: "произошёл сбой отправки",
-        wait: "происходит отправка"
+        wait: "происходит отправка",
+        spinner: 'assets/img/spinner.gif',
+        ok: 'assets/img/ok.png',
+        fail: 'assets/img/fail.png'
     }
-    const messageElm = document.createElement("div");
+
+    const path = {
+        design: 'https://jsonplaceholder.typicode.com/photos',
+        question: 'https://jsonplaceholder.typicode.com/users'
+    }
+
     forms.forEach(form => {
         form.addEventListener('submit', _formSubmitHandler);
     })
 
     async function _formSubmitHandler(e) {
         e.preventDefault();
-        messageElm.textContent = message.wait;
-        e.target.appendChild(messageElm);
+        const item =  e.target;
+        let validObj;
+        let api;
 
-        let form = new Form(e.target, {
-            user_name:[Validators.required],
-            user_phone:[Validators.required, Validators.minLength(8)]
-        });
+        if(item.closest('.popup-design')) { 
+            api = path.design;
+            validObj = {
+                name: [Validators.required],
+                phone:[Validators.required],
+                email:[Validators.required],
+                message: [Validators.required, Validators.minLength(15)]
+            };
+        } else {
+            validObj = {
+                name: [Validators.required],
+                phone:[Validators.required],
+            }
+            api = path.question;
+        }
+
+        console.log(api);
+
+        let form = new Form(item, validObj);
+
 
         if(form.isValid()) {
-            RequestService.postRequest({...form.value()}, urlSend)
+            const messageElm = document.createElement("div");
+            messageElm.classList.add('status');
+            item.parentNode.appendChild(messageElm);
+    
+            item.classList.add('animated', 'fadeOutUp');
+            setTimeout(() => {
+                item.style.display = 'none';
+            }, 400)
+
+            let statusImg = document.createElement('img');
+            statusImg.setAttribute('src', message.spinner);
+            statusImg.classList.add('animated', 'fadeInUp');
+            messageElm.appendChild(statusImg);
+    
+            let textMessage = document.createElement('div');
+            textMessage.textContent = message.wait;
+            messageElm.appendChild(textMessage);
+
+
+            let data = {
+                ...form.value()
+            }
+            console.log(data);
+
+            RequestService.postRequest(data, api)
                 .then(response => {
                     console.log(response);
-                    messageElm.textContent = message.success;
-                    setTimeout(() => {
-                        messageElm.remove();
-                    }, 2000);
+                    statusImg.setAttribute('src', message.ok)
+                    textMessage.textContent = message.success;
                 })
                 .catch(error => {
-                    messageElm.textContent = message.failure;
+                    console.log(error);
+                    statusImg.setAttribute('src', message.fail)
+                    textMessage.textContent = message.failure;
+                })
+                .finally(() => {
                     setTimeout(() => {
+                        item.classList.remove('animated', 'fadeOutUp');
                         messageElm.remove();
-                    }, 5000);
-                });
-            form.clear();
+                    })
+                    form.clear();
+                }, 5000);
         }
     }
 }
