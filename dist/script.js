@@ -4522,6 +4522,7 @@ function forms(selectorForms) {
                   item.style.display = '';
                   item.classList.remove('fadeOutUp');
                   item.classList.add('fadeInUp');
+                  item.querySelector('.file_upload button').textContent = 'Загрузить фотографию';
                   messageElm.remove();
                 }, 5000);
                 form.clear();

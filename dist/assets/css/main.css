@@ -606,7 +606,6 @@ h4 {
   color: #c51abb;
   border: 2px dashed #c51abb;
   padding: 1.5rem;
-  width: 100%;
 }
 .calc .file_upload > button:before {
   content: '';
@@ -1204,7 +1203,6 @@ h4 {
   color: #c51abb;
   border: 2px dashed #c51abb;
   padding: 1.5rem;
-  width: 100%;
 }
 .popup-design .file_upload > button:before {
   content: '';
