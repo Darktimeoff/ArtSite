@@ -59,67 +59,35 @@ export function forms(selectorForms) {
         ok: 'assets/img/ok.png',
         fail: 'assets/img/fail.png'
     }
+    const upload = document.querySelectorAll('[name="upload"]');
+    console.log(upload)
+    let infoPhoto = {};
 
     const path = {
         design: 'https://jsonplaceholder.typicode.com/photos',
         question: 'https://jsonplaceholder.typicode.com/users'
     }
 
-    forms.forEach(form => {
-        form.addEventListener('submit', _formSubmitHandler);
-    })
+    upload.forEach(input => _inputTypeFile(input, infoPhoto));
+
+    _formsAddSubmitHandler(forms, _formSubmitHandler);
 
     async function _formSubmitHandler(e) {
         e.preventDefault();
         const item =  e.target;
-        let validObj;
+        let validObj = {};
         let api;
 
-        if(item.closest('.popup-design')) { 
-            api = path.design;
-            validObj = {
-                name: [Validators.required],
-                phone:[Validators.required],
-                email:[Validators.required],
-                message: [Validators.required, Validators.minLength(15)]
-            };
-        } else {
-            validObj = {
-                name: [Validators.required],
-                phone:[Validators.required],
-            }
-            api = path.question;
-        }
-
-        console.log(api);
+        api = _defineFormAndSetValidAndUrl(item, validObj, path);
 
         let form = new Form(item, validObj);
 
 
         if(form.isValid()) {
-            const messageElm = document.createElement("div");
-            messageElm.classList.add('status');
-            item.parentNode.appendChild(messageElm);
-    
-            item.classList.add('animated', 'fadeOutUp');
-            setTimeout(() => {
-                item.style.display = 'none';
-            }, 400)
 
-            let statusImg = document.createElement('img');
-            statusImg.setAttribute('src', message.spinner);
-            statusImg.classList.add('animated', 'fadeInUp');
-            messageElm.appendChild(statusImg);
-    
-            let textMessage = document.createElement('div');
-            textMessage.textContent = message.wait;
-            messageElm.appendChild(textMessage);
+            let {messageElm, statusImg, textMessage} = _createStatusModal(item, message);
 
-
-            let data = {
-                ...form.value()
-            }
-            console.log(data);
+            const data = _createDataToSend(infoPhoto, form);
 
             RequestService.postRequest(data, api)
                 .then(response => {
@@ -134,11 +102,13 @@ export function forms(selectorForms) {
                 })
                 .finally(() => {
                     setTimeout(() => {
-                        item.classList.remove('animated', 'fadeOutUp');
+                        item.style.display = '';
+                        item.classList.remove('fadeOutUp');
+                        item.classList.add('fadeInUp');
                         messageElm.remove();
-                    })
+                    }, 5000)
                     form.clear();
-                }, 5000);
+                });
         }
     }
 }
@@ -155,4 +125,100 @@ function _clearError($control) {
         $control.nextElementSibling.remove();
         $control.classList.remove('invalid');
     }
+}
+
+function _defineFormAndSetValidAndUrl(form, validObj, path) {
+    if(form.closest('.popup-design') || form.classList.contains('consul_form')) { 
+        validObj.name = [Validators.required];
+        validObj.phone = [Validators.required];
+        validObj.email = [Validators.required];
+        validObj.message = [Validators.required, Validators.minLength(15)];
+
+        return path.design;
+    } else if(form.classList.contains('calc_form')) {
+        validObj.size = [];
+        validObj.material = [];
+        validObj.options = [];
+        validObj.promocode = [];
+
+        return path.design;
+    } else {
+        validObj.name = [Validators.required];
+        validObj.phone = [Validators.required];
+
+       return path.question;
+    }
+}
+
+function _createStatusModal(form, message) {
+    const messageElm = document.createElement("div");
+    messageElm.classList.add('status');
+    form.parentNode.appendChild(messageElm);
+    
+    form.classList.add('animated', 'fadeOutUp');
+    setTimeout(() => {
+        form.style.display = 'none';
+    }, 400)
+
+    let statusImg = document.createElement('img');
+    statusImg.setAttribute('src', message.spinner);
+    statusImg.classList.add('animated', 'fadeInUp');
+    messageElm.appendChild(statusImg);
+    
+    let textMessage = document.createElement('div');
+    textMessage.textContent = message.wait;
+    messageElm.appendChild(textMessage);
+
+    return {
+        messageElm,
+        statusImg,
+        textMessage
+    }
+}
+
+function _formsAddSubmitHandler(forms, handler) { 
+    forms.forEach(form => {
+        form.addEventListener('submit', handler);
+    })
+}
+
+function _inputTypeFile(input, infoPhoto) {
+    const button = input.closest('.file_upload').querySelector('button');
+    /*const buttonImg = document.createElement('img');
+    buttonImg.classList.add('upload_img')*/
+
+    input.addEventListener('change', (e) => {
+        const target = e.target;
+        const reader = new FileReader();
+        let file = target.files[0]
+    
+        infoPhoto.fileName = file.name;
+        infoPhoto.size = file.size;
+    
+        reader.readAsBinaryString(file);
+        reader.addEventListener('load', (e) => {
+            if(infoPhoto.size <= 1e7) {
+                button.textContent = _checkAndCutName(infoPhoto.fileName);
+                infoPhoto.base64 = btoa(event.target.result); //конвертация картинки в строку
+                //button.append(buttonImg);
+                //buttonImg.src = `data:image/jpeg;base64,${infoPhoto.base64}`
+            } else {
+                button.textContent = 'Размер файта не должен превышать 10мб';
+            }
+        });
+    });
+}
+
+function _createDataToSend(infoPhoto, form) {
+    let data = {
+        ...form.value()
+    }
+    
+    if(infoPhoto.base64) data.img = infoPhoto.base64;
+
+    return data;
+}
+
+function _checkAndCutName(name) {
+    return name.length < 10 ? name : name.slice(0, 10) + '...';
 }

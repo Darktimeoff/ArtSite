@@ -65,6 +65,20 @@ h4 {
 .p-heading {
   font-size: 2.2rem;
 }
+
+.upload_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.status{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .button {
   border-radius: 50px;
   display: block;
@@ -596,6 +610,7 @@ h4 {
   color: #c51abb;
   border: 2px dashed #c51abb;
   padding: 1.5rem;
+  width: 100%;
 }
 .calc .file_upload > button:before {
   content: '';
@@ -1193,6 +1208,7 @@ h4 {
   color: #c51abb;
   border: 2px dashed #c51abb;
   padding: 1.5rem;
+  width: 100%;
 }
 .popup-design .file_upload > button:before {
   content: '';
