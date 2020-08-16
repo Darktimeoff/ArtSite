@@ -1,6 +1,7 @@
 import Modal from './modules/modal.component';
 import sliders from './modules/slider.component';
 import { forms } from './modules/form.component';
+import { showMoreInfFromServer } from './modules/showmoreinf.component';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -21,5 +22,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     sliders('.feedback-slider', '.feedback-slider-item', 'horizontal', 'show', '.main-prev-btn', '.main-next-btn', true, 3000, true);
     sliders('.main-slider', '.main-slider-item', 'vertical', 'show');
-    forms('form')
+    forms('form');  
+    showMoreInfFromServer('.styles', '.row', '.button-styles');
 });

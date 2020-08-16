@@ -11,6 +11,15 @@ export default class RequestService {
             console.error(error)
         }
     }
+
+    static async getRequest(url) {
+        try {
+            const request = new Request(url);
+            return _useRequest(request);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
 
 async function _useRequest(request) {
