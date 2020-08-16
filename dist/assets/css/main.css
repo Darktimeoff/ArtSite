@@ -271,6 +271,7 @@ h4 {
   color: #c51abb;
   border: 2px solid #c51abb;
   padding: 1.5rem;
+  width: 100%;
 }
 .main .file_upload > button:before {
   content: '';
