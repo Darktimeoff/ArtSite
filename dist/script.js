@@ -4505,11 +4505,28 @@ window.addEventListener('DOMContentLoaded', function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.keys */ "./node_modules/core-js/modules/es.object.keys.js");
+/* harmony import */ var core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.to-string */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.promise */ "./node_modules/core-js/modules/es.promise.js");
+/* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _services_request_services__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../services/request.services */ "./src/js/services/request.services.js");
+
+
+
+
+
+
+
 var calc = function calc(form, result) {
-  var PROMOCODE = 'IWANTPOPART';
   var $form = document.querySelector(form);
   var $result = $form.querySelector(result);
-  var calcData = {};
+  var calcOptionsValue = {};
   var sum = 0;
 
   function _formChangeHandler(e) {
@@ -4517,27 +4534,27 @@ var calc = function calc(form, result) {
 
     _defineSelectAndCalc(e.target.getAttribute('name'), value);
 
-    _calcFormula(calcData);
-
-    _checkCondition(calcData);
+    _checkCondition();
   }
 
   function _defineSelectAndCalc(name, value) {
     switch (name) {
       case 'size':
-        calcData.size = parseInt(value);
+        calcOptionsValue.size = value;
         break;
 
       case 'material':
-        calcData.material = parseFloat(value);
+        calcOptionsValue.material = value;
         break;
 
       case 'options':
-        calcData.options = parseInt(value);
+        calcOptionsValue.options = value;
+        break;
+
+      case 'promocode':
+        calcOptionsValue.promocode = value;
         break;
     }
-
-    if (name === 'promocode' && value === PROMOCODE) calcData.promocode = true;
   }
 
   function _calcFormula(_ref) {
@@ -4546,15 +4563,64 @@ var calc = function calc(form, result) {
         options = _ref.options,
         promocode = _ref.promocode;
     var withOutPromo = options ? size * material + options : size * material;
-    sum = promocode ? withOutPromo - withOutPromo * 30 / 100 : withOutPromo;
+    sum = promocode ? withOutPromo - withOutPromo * promocode / 100 : withOutPromo;
   }
 
-  function _checkCondition(calcData) {
-    if (calcData.size && calcData.material) {
-      $result.textContent = sum;
-    } else {
-      $result.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
-    }
+  function _checkCondition() {
+    return regeneratorRuntime.async(function _checkCondition$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (!(calcOptionsValue.size && calcOptionsValue.material)) {
+              _context.next = 9;
+              break;
+            }
+
+            _context.t0 = _calcFormula;
+            _context.next = 4;
+            return regeneratorRuntime.awrap(_getPrice());
+
+          case 4:
+            _context.t1 = _context.sent;
+            (0, _context.t0)(_context.t1);
+            $result.textContent = sum;
+            _context.next = 10;
+            break;
+
+          case 9:
+            $result.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+
+          case 10:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  }
+
+  function _getPrice() {
+    var temp, response;
+    return regeneratorRuntime.async(function _getPrice$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            temp = {};
+            _context2.next = 3;
+            return regeneratorRuntime.awrap(_services_request_services__WEBPACK_IMPORTED_MODULE_5__["default"].getRequest('assets/db.json'));
+
+          case 3:
+            response = _context2.sent;
+            Object.keys(calcOptionsValue).forEach(function (key) {
+              temp[key] = parseFloat(response.calc[key][calcOptionsValue[key]]);
+            });
+            return _context2.abrupt("return", temp);
+
+          case 6:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
   }
 
   $form.addEventListener('change', _formChangeHandler);
