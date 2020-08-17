@@ -4558,7 +4558,6 @@ var burger = function burger(button, menu, resolution, showClass) {
 
   function _buttonClickHandler() {
     if (document.documentElement.offsetWidth < resolution) {
-      console.log(document.documentElement.offsetWidth);
       $menu.classList.add('animated');
       $menu.classList.toggle('fadeInDown');
       $menu.classList.toggle(showClass);
