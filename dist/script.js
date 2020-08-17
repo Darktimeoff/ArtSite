@@ -4461,6 +4461,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_form_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/form.component */ "./src/js/modules/form.component.js");
 /* harmony import */ var _modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showmoreinf.component */ "./src/js/modules/showmoreinf.component.js");
 /* harmony import */ var _modules_calc_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/calc.component */ "./src/js/modules/calc.component.js");
+/* harmony import */ var _modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/tabs.component */ "./src/js/modules/tabs.component.js");
+
 
 
 
@@ -4492,6 +4494,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_form_component__WEBPACK_IMPORTED_MODULE_2__["forms"])('form');
   Object(_modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__["showMoreInfFromServer"])('.styles', '.row', '.button-styles');
   Object(_modules_calc_component__WEBPACK_IMPORTED_MODULE_4__["default"])('.calc_form', '.calc-price');
+  Object(_modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__["default"])('.portfolio', '.portfolio-menu', '.portfolio-wrapper');
 });
 
 /***/ }),
@@ -5277,6 +5280,106 @@ var sliders = function sliders(parent, slides, direction, showClass, prev, next)
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
+
+/***/ }),
+
+/***/ "./src/js/modules/tabs.component.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/tabs.component.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var tabs = function tabs(section, tabsParent, contentParent) {
+  var $section = document.querySelector(section);
+  var $tabsParent = $section.querySelector(tabsParent);
+  var $contentParent = $section.querySelector(contentParent);
+  var $contentItems = $contentParent.querySelectorAll('.portfolio-block');
+  var prevValue;
+
+  function _tabClickHandler(e) {
+    var target = e.target;
+
+    if (target && target.tagName === 'LI') {
+      var filterClass = target.classList[0];
+      if (prevValue === filterClass) return;
+
+      _hideActiveElm($tabsParent, '.active');
+
+      _showActiveElm(target, '.active');
+
+      _showAllContent();
+
+      _showFilterContent('.' + filterClass);
+
+      prevValue = filterClass;
+    }
+  }
+
+  function _hideActiveElm(section, activeSel) {
+    section.querySelector(activeSel).classList.remove(activeSel.slice(1));
+  }
+
+  function _showActiveElm(target, activeSel) {
+    target.classList.add(activeSel.slice(1));
+  }
+
+  function _showFilterContent(showSel) {
+    if (_exceptionFilter(showSel)) return undefined;
+    $contentItems.forEach(function (item) {
+      if (!item.classList.contains(showSel.slice(1))) {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  function _exceptionFilter(showSel) {
+    switch (showSel.slice(1)) {
+      case 'grandmother':
+        {
+          $section.querySelector('.portfolio-no').classList.add('show');
+          $contentParent.style.display = 'none';
+          return true;
+        }
+        break;
+
+      case 'granddad':
+        {
+          $section.querySelector('.portfolio-no').classList.add('show');
+          $contentParent.style.display = 'none';
+          return true;
+        }
+        break;
+
+      default:
+        {
+          $section.querySelector('.portfolio-no').classList.remove('show');
+          $contentParent.style.display = '';
+          return false;
+        }
+    }
+  }
+
+  function _showAllContent() {
+    $contentItems.forEach(function (item) {
+      item.style.display = '';
+      item.classList.add('animated', 'fadeInDown');
+    });
+  }
+
+  $tabsParent.addEventListener('click', _tabClickHandler);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (tabs);
 
 /***/ }),
 
