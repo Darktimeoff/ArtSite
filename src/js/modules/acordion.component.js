@@ -5,17 +5,13 @@ const acordion = (section, acordionHeader) => {
         const target = e.target.closest(acordionHeader);
         if(target) {
             const acrBlock = target.nextElementSibling;
-            if(!acrBlock.classList.contains('show'))  {
-                acrBlock.classList.remove('fadeInUp');
-                acrBlock.classList.add('animated', 'fadeInDown', 'show');
-                target.classList.add('active-style');
-            }
-            else {
-                acrBlock.classList.add('fadeInUp')
-                setTimeout(() => {
-                    acrBlock.classList.remove('fadeInDown','show');
-                    target.classList.remove('active-style');
-                }, 1000);
+            target.classList.toggle('active-style');
+            acrBlock.classList.toggle('active-content');
+
+            if(target.classList.contains('active-style'))  {
+                acrBlock.style.maxHeight = acrBlock.scrollHeight + 80 + 'px';
+            } else {
+                acrBlock.style.maxHeight = '0px';
             }
         }
     }

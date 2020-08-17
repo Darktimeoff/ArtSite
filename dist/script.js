@@ -4522,17 +4522,13 @@ var acordion = function acordion(section, acordionHeader) {
 
     if (target) {
       var acrBlock = target.nextElementSibling;
+      target.classList.toggle('active-style');
+      acrBlock.classList.toggle('active-content');
 
-      if (!acrBlock.classList.contains('show')) {
-        acrBlock.classList.remove('fadeInUp');
-        acrBlock.classList.add('animated', 'fadeInDown', 'show');
-        target.classList.add('active-style');
+      if (target.classList.contains('active-style')) {
+        acrBlock.style.maxHeight = acrBlock.scrollHeight + 80 + 'px';
       } else {
-        acrBlock.classList.add('fadeInUp');
-        setTimeout(function () {
-          acrBlock.classList.remove('fadeInDown', 'show');
-          target.classList.remove('active-style');
-        }, 1000);
+        acrBlock.style.maxHeight = '0px';
       }
     }
   }
