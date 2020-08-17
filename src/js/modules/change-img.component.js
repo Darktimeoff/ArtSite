@@ -27,7 +27,6 @@ const changeImg = (section, wrapper, parentImg) => {
     }
     
     $imgs.forEach(img => {
-        console.log(img);
         img.addEventListener('mouseover', _imgMouseEnterHandler);
         img.addEventListener('mouseout', _imgMouseLeaveHandler); 
     })

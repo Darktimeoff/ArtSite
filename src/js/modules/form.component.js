@@ -60,7 +60,6 @@ export function forms(selectorForms) {
         fail: 'assets/img/fail.png'
     }
     const upload = document.querySelectorAll('[name="upload"]');
-    console.log(upload)
     let infoPhoto = {};
 
     const path = {
