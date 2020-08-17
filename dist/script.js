@@ -4462,6 +4462,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showmoreinf.component */ "./src/js/modules/showmoreinf.component.js");
 /* harmony import */ var _modules_calc_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/calc.component */ "./src/js/modules/calc.component.js");
 /* harmony import */ var _modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/tabs.component */ "./src/js/modules/tabs.component.js");
+/* harmony import */ var _modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/change-img.component */ "./src/js/modules/change-img.component.js");
+
 
 
 
@@ -4495,6 +4497,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__["showMoreInfFromServer"])('.styles', '.row', '.button-styles');
   Object(_modules_calc_component__WEBPACK_IMPORTED_MODULE_4__["default"])('.calc_form', '.calc-price');
   Object(_modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__["default"])('.portfolio', '.portfolio-menu', '.portfolio-wrapper');
+  Object(_modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__["default"])('.sizes', '.sizes-wrapper', '.sizes-block');
 });
 
 /***/ }),
@@ -4633,6 +4636,61 @@ var calc = function calc(form, result) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (calc);
+
+/***/ }),
+
+/***/ "./src/js/modules/change-img.component.js":
+/*!************************************************!*\
+  !*** ./src/js/modules/change-img.component.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var changeImg = function changeImg(section, wrapper, parentImg) {
+  var $section = document.querySelector(section);
+  var $wrapper = $section.querySelector(wrapper);
+  var $imgs = $wrapper.querySelectorAll(parentImg);
+  var $img;
+  var changed;
+
+  function _imgMouseEnterHandler(e) {
+    var target = e.target.closest(parentImg).firstElementChild;
+    var src = target.getAttribute('src');
+
+    if (target.tagName === 'IMG') {
+      var dot = src.indexOf('.');
+      var newSrc = src.slice(0, dot) + '-1.png';
+      target.setAttribute('src', newSrc);
+      $img = target;
+      changed = true;
+    }
+  }
+
+  function _imgMouseLeaveHandler(e) {
+    if (changed) {
+      var prevSrc = $img.getAttribute('src').slice(0, $img.getAttribute('src').lastIndexOf('-1')) + '.png';
+      $img.setAttribute('src', prevSrc);
+      changed = false;
+    }
+  }
+
+  $imgs.forEach(function (img) {
+    console.log(img);
+    img.addEventListener('mouseover', _imgMouseEnterHandler);
+    img.addEventListener('mouseout', _imgMouseLeaveHandler);
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (changeImg);
 
 /***/ }),
 
