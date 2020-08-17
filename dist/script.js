@@ -4464,6 +4464,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/tabs.component */ "./src/js/modules/tabs.component.js");
 /* harmony import */ var _modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/change-img.component */ "./src/js/modules/change-img.component.js");
 /* harmony import */ var _modules_acordion_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/acordion.component */ "./src/js/modules/acordion.component.js");
+/* harmony import */ var _modules_burger_menu_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/burger-menu.component */ "./src/js/modules/burger-menu.component.js");
+
 
 
 
@@ -4501,6 +4503,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_tabs_component__WEBPACK_IMPORTED_MODULE_5__["default"])('.portfolio', '.portfolio-menu', '.portfolio-wrapper');
   Object(_modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__["default"])('.sizes', '.sizes-wrapper', '.sizes-block');
   Object(_modules_acordion_component__WEBPACK_IMPORTED_MODULE_7__["default"])('.often-questions', '.accordion-heading');
+  Object(_modules_burger_menu_component__WEBPACK_IMPORTED_MODULE_8__["default"])('.burger', '.burger-menu', 992, 'show');
 });
 
 /***/ }),
@@ -4537,6 +4540,35 @@ var acordion = function acordion(section, acordionHeader) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (acordion);
+
+/***/ }),
+
+/***/ "./src/js/modules/burger-menu.component.js":
+/*!*************************************************!*\
+  !*** ./src/js/modules/burger-menu.component.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var burger = function burger(button, menu, resolution, showClass) {
+  var $button = document.querySelector(button);
+  var $menu = document.querySelector(menu);
+
+  function _buttonClickHandler() {
+    if (document.documentElement.offsetWidth < resolution) {
+      console.log(document.documentElement.offsetWidth);
+      $menu.classList.add('animated');
+      $menu.classList.toggle('fadeInDown');
+      $menu.classList.toggle(showClass);
+    }
+  }
+
+  $button.addEventListener('click', _buttonClickHandler);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (burger);
 
 /***/ }),
 

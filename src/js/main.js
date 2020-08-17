@@ -6,6 +6,7 @@ import calc from './modules/calc.component';
 import tabs from './modules/tabs.component';
 import changeImg from './modules/change-img.component';
 import acordion from './modules/acordion.component';
+import burger from './modules/burger-menu.component';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -32,4 +33,5 @@ window.addEventListener('DOMContentLoaded', () => {
     tabs('.portfolio', '.portfolio-menu', '.portfolio-wrapper');
     changeImg('.sizes', '.sizes-wrapper', '.sizes-block');
     acordion('.often-questions', '.accordion-heading')
+    burger('.burger', '.burger-menu', 992, 'show');
 });
