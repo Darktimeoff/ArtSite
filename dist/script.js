@@ -4465,6 +4465,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/change-img.component */ "./src/js/modules/change-img.component.js");
 /* harmony import */ var _modules_acordion_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/acordion.component */ "./src/js/modules/acordion.component.js");
 /* harmony import */ var _modules_burger_menu_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/burger-menu.component */ "./src/js/modules/burger-menu.component.js");
+/* harmony import */ var _modules_scrolling_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/scrolling.component */ "./src/js/modules/scrolling.component.js");
+
 
 
 
@@ -4504,6 +4506,7 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_change_img_component__WEBPACK_IMPORTED_MODULE_6__["default"])('.sizes', '.sizes-wrapper', '.sizes-block');
   Object(_modules_acordion_component__WEBPACK_IMPORTED_MODULE_7__["default"])('.often-questions', '.accordion-heading');
   Object(_modules_burger_menu_component__WEBPACK_IMPORTED_MODULE_8__["default"])('.burger', '.burger-menu', 992, 'show');
+  Object(_modules_scrolling_component__WEBPACK_IMPORTED_MODULE_9__["default"])('.pageup');
 });
 
 /***/ }),
@@ -5229,6 +5232,65 @@ function _calcScrollEnd(scrollHeight) {
     window.onscroll = null;
   }
 }
+
+/***/ }),
+
+/***/ "./src/js/modules/scrolling.component.js":
+/*!***********************************************!*\
+  !*** ./src/js/modules/scrolling.component.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var scrolling = function scrolling(button) {
+  var $scrollToBtn = document.querySelector(button);
+  window.addEventListener('scroll', function () {
+    if (document.documentElement.scrollTop > 1650) {
+      $scrollToBtn.classList.add('animated', 'fadeIn');
+      $scrollToBtn.classList.remove('fadeOut');
+    } else {
+      $scrollToBtn.classList.add('fadeOut');
+      $scrollToBtn.classList.remove('fadeIn');
+    }
+  });
+  var links = document.querySelectorAll('[href^="#"]');
+  var speed = 0.18;
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var widthTop = document.documentElement.scrollTop;
+      var hash = this.hash;
+      var toBlock = document.querySelector(hash).getBoundingClientRect().top;
+      var start = null;
+
+      function step(time) {
+        if (start === null) {
+          start = time;
+        }
+
+        var progress = time - start;
+        var r = toBlock < 0 ? Math.max(widthTop - progress / speed, widthTop + toBlock) : Math.min(widthTop + progress / speed, widthTop + toBlock);
+        document.documentElement.scrollTo(0, r);
+
+        if (r != widthTop + toBlock) {
+          requestAnimationFrame(step);
+        } else {
+          location.hash = hash;
+        }
+      }
+
+      requestAnimationFrame(step);
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (scrolling);
 
 /***/ }),
 
