@@ -188,6 +188,7 @@ function _inputTypeFile(input, infoPhoto) {
     buttonImg.classList.add('upload_img')*/
 
     input.addEventListener('change', (e) => {
+        console.log('change')
         const target = e.target;
         const reader = new FileReader();
         let file = target.files[0]

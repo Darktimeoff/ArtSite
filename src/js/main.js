@@ -8,6 +8,7 @@ import changeImg from './modules/change-img.component';
 import acordion from './modules/acordion.component';
 import burger from './modules/burger-menu.component';
 import scrolling from './modules/scrolling.component'
+import drop from './modules/dragAndDrop.component.js';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -36,4 +37,5 @@ window.addEventListener('DOMContentLoaded', () => {
     acordion('.often-questions', '.accordion-heading')
     burger('.burger', '.burger-menu', 992, 'show');
     scrolling('.pageup');
+    drop();
 });
