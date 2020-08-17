@@ -87,7 +87,7 @@ export function forms(selectorForms) {
 
             let {messageElm, statusImg, textMessage} = _createStatusModal(item, message);
 
-            const data = _createDataToSend(infoPhoto, form);
+            const data = _createDataToSend(infoPhoto, form, item);
 
             RequestService.postRequest(data, api)
                 .then(response => {
@@ -210,12 +210,14 @@ function _inputTypeFile(input, infoPhoto) {
     });
 }
 
-function _createDataToSend(infoPhoto, form) {
+function _createDataToSend(infoPhoto, form, item) {
     let data = {
         ...form.value()
     }
     
     if(infoPhoto.base64) data.img = infoPhoto.base64;
+
+    if(item.classList.contains('calc_form')) data.totalPrice = item.querySelector('.calc-price').textContent;
 
     return data;
 }

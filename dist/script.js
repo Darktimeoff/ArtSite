@@ -4460,6 +4460,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider.component */ "./src/js/modules/slider.component.js");
 /* harmony import */ var _modules_form_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/form.component */ "./src/js/modules/form.component.js");
 /* harmony import */ var _modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/showmoreinf.component */ "./src/js/modules/showmoreinf.component.js");
+/* harmony import */ var _modules_calc_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/calc.component */ "./src/js/modules/calc.component.js");
+
 
 
 
@@ -4489,7 +4491,79 @@ window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_slider_component__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider', '.main-slider-item', 'vertical', 'show');
   Object(_modules_form_component__WEBPACK_IMPORTED_MODULE_2__["forms"])('form');
   Object(_modules_showmoreinf_component__WEBPACK_IMPORTED_MODULE_3__["showMoreInfFromServer"])('.styles', '.row', '.button-styles');
+  Object(_modules_calc_component__WEBPACK_IMPORTED_MODULE_4__["default"])('.calc_form', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calc.component.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/calc.component.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var calc = function calc(form, result) {
+  var PROMOCODE = 'IWANTPOPART';
+  var $form = document.querySelector(form);
+  var $result = $form.querySelector(result);
+  var calcData = {};
+  var sum = 0;
+
+  function _formChangeHandler(e) {
+    var value = e.target.value;
+
+    _defineSelectAndCalc(e.target.getAttribute('name'), value);
+
+    _calcFormula(calcData);
+
+    _checkCondition(calcData);
+  }
+
+  function _defineSelectAndCalc(name, value) {
+    switch (name) {
+      case 'size':
+        calcData.size = parseInt(value);
+        break;
+
+      case 'material':
+        calcData.material = parseFloat(value);
+        break;
+
+      case 'options':
+        calcData.options = parseInt(value);
+        break;
+    }
+
+    if (name === 'promocode' && value === PROMOCODE) calcData.promocode = true;
+  }
+
+  function _calcFormula(_ref) {
+    var size = _ref.size,
+        material = _ref.material,
+        options = _ref.options,
+        promocode = _ref.promocode;
+    var withOutPromo = options ? size * material + options : size * material;
+    sum = promocode ? withOutPromo - withOutPromo * 30 / 100 : withOutPromo;
+  }
+
+  function _checkCondition(calcData) {
+    if (calcData.size && calcData.material) {
+      $result.textContent = sum;
+    } else {
+      $result.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+    }
+  }
+
+  $form.addEventListener('change', _formChangeHandler);
+  $form.addEventListener('submit', function () {
+    return $result.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (calc);
 
 /***/ }),
 
@@ -4651,7 +4725,7 @@ function forms(selectorForms) {
 
             if (form.isValid()) {
               _createStatusModal2 = _createStatusModal(item, message), messageElm = _createStatusModal2.messageElm, statusImg = _createStatusModal2.statusImg, textMessage = _createStatusModal2.textMessage;
-              data = _createDataToSend(infoPhoto, form);
+              data = _createDataToSend(infoPhoto, form, item);
               _services_request_services__WEBPACK_IMPORTED_MODULE_13__["default"].postRequest(data, api).then(function (response) {
                 console.log(response);
                 statusImg.setAttribute('src', message.ok);
@@ -4769,10 +4843,11 @@ function _inputTypeFile(input, infoPhoto) {
   });
 }
 
-function _createDataToSend(infoPhoto, form) {
+function _createDataToSend(infoPhoto, form, item) {
   var data = _objectSpread({}, form.value());
 
   if (infoPhoto.base64) data.img = infoPhoto.base64;
+  if (item.classList.contains('calc_form')) data.totalPrice = item.querySelector('.calc-price').textContent;
   return data;
 }
 
